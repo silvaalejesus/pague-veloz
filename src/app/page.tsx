@@ -1,7 +1,9 @@
+import { ItemsList } from "@/components/ItemList";
+
 export default function Home() {
   return (
     <div>
-      <p>hello word</p>
+      <ItemsList />
     </div>
   );
 }

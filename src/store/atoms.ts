@@ -8,17 +8,20 @@ export const isLoadingAtom = atom<boolean>(true);
 export const currentPageAtom = atom<number>(1);
 
 // Paginação simples porque a api nao tem paginacao por padrao e retorna varios dados
-export const itemsPerPageAtom = atom<number>(10);
+export const itemsPerPageAtom = atom<number>(20);
 
 export const searchQueryAtom = atom<string>("");
 
+export const errorAtom = atom<string | null>(null);
+
+// Busca apenas as corretoras que estão ativas
 export const activeItemsAtom = atom((get) => {
   const allItems = get(allItemsAtom);
   return allItems.filter((item) => item.status === "EM FUNCIONAMENTO NORMAL");
 });
 
 export const filteredItemsAtom = atom((get) => {
-  const activeItems = get(activeItemsAtom);
+  const activeItems = get(allItemsAtom);
   const searchQuery = get(searchQueryAtom);
   const lowerCaseSearchQuery = searchQuery.toLowerCase();
 

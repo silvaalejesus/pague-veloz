@@ -1,41 +1,41 @@
 "use client";
 
 import { getCorretoras } from "@/services/axiosClient";
-import { allItemsAtom, isLoadingAtom } from "@/store/atoms";
-import { useAtomValue, useSetAtom } from "jotai";
-import { useEffect } from "react";
+import { allItemsAtom, errorAtom, isLoadingAtom } from "@/store/atoms";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useCallback, useEffect } from "react";
 
 export const useCorretoras = () => {
-  const setAllItems = useSetAtom(allItemsAtom);
+  const [allItems, setAllItems] = useAtom(allItemsAtom);
   const setIsLoading = useSetAtom(isLoadingAtom);
-  const isLoading = useAtomValue(isLoadingAtom);
+  const setError = useSetAtom(errorAtom);
+
+  const fetchData = useCallback(async () => {
+    setError(null);
+    setIsLoading(true);
+
+    try {
+      const data = await getCorretoras();
+      setAllItems(data);
+    } catch (error) {
+      console.error("Falha ao buscar as corretoras:", error);
+      const errorMessage =
+        error.message || "Ocorreu um erro inesperado. Tente novamente.";
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [setAllItems, setIsLoading, setError]);
 
   useEffect(() => {
-    let isMounted = true;
-
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const data = await getCorretoras();
-
-        if (isMounted) {
-          setAllItems(data);
-        }
-      } catch (error) {
-        console.error("Falha ao buscar as corretoras:", error);
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
-      }
-    };
-
+    if (allItems.length > 0) {
+      return;
+    }
     fetchData();
+  }, [allItems, fetchData]);
 
-    return () => {
-      isMounted = false;
-    };
-  }, [setAllItems, setIsLoading]);
-
-  return { isLoading };
+  return {
+    isLoading: useAtomValue(isLoadingAtom),
+    refetch: fetchData,
+  };
 };

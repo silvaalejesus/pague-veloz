@@ -7,11 +7,16 @@ import {
 } from "@/store/atoms";
 import { Box, Pagination } from "@mui/material";
 import { useAtom, useAtomValue } from "jotai";
+import { useEffect } from "react";
 
 export const PaginationControls = () => {
   const [currentPage, setCurrentPage] = useAtom(currentPageAtom);
   const itemsPerPage = useAtomValue(itemsPerPageAtom);
   const filteredItems = useAtomValue(filteredItemsAtom);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPage]);
 
   if (!filteredItems || filteredItems.length === 0) {
     return null;

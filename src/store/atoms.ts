@@ -8,11 +8,14 @@ export const isLoadingAtom = atom<boolean>(true);
 export const currentPageAtom = atom<number>(1);
 
 // Paginação simples porque a api nao tem paginacao por padrao e retorna varios dados
-export const itemsPerPageAtom = atom<number>(20);
+export const itemsPerPageAtom = atom<number>(30);
 
 export const searchQueryAtom = atom<string>("");
 
 export const errorAtom = atom<string | null>(null);
+
+export const selectedUfsAtom = atom<string[]>([]);
+export const selectedStatusesAtom = atom<string[]>([]);
 
 // Busca apenas as corretoras que estão ativas
 export const activeItemsAtom = atom((get) => {
@@ -21,35 +24,28 @@ export const activeItemsAtom = atom((get) => {
 });
 
 export const filteredItemsAtom = atom((get) => {
-  const activeItems = get(allItemsAtom);
-  const searchQuery = get(searchQueryAtom);
-  const lowerCaseSearchQuery = searchQuery.toLowerCase();
+  const allItems = get(allItemsAtom);
+  const query = get(searchQueryAtom).toLowerCase();
+  const selectedUfs = get(selectedUfsAtom);
+  const selectedStatuses = get(selectedStatusesAtom);
 
-  if (!searchQuery) {
-    return activeItems;
-  }
+  return allItems.filter((item) => {
+    const nomeComercial = item.nome_comercial?.toLowerCase() ?? "";
+    const nomeSocial = item.nome_social?.toLowerCase() ?? "";
+    const cnpj = item.cnpj?.replace(/[^\d]/g, "") ?? "";
+    const searchCnpj = query.replace(/[^\d]/g, "");
 
-  const result = activeItems.filter((item) => {
-    const hasNomeComercial = (
-      item.nome_comercial?.toLowerCase() ?? ""
-    ).includes(lowerCaseSearchQuery);
-    const hasNomeSocial = (item.nome_social?.toLowerCase() ?? "").includes(
-      lowerCaseSearchQuery
-    );
+    const matchesSearch =
+      nomeComercial.includes(query) ||
+      nomeSocial.includes(query) ||
+      (searchCnpj.length > 0 && cnpj.includes(searchCnpj));
 
-    const cleanSearchCnpj = searchQuery.replace(/[^\d]/g, "");
-    let hasCnpj = false;
+    const matchesUf = selectedUfs.length === 0 || selectedUfs.includes(item.uf);
+    const matchesStatus =
+      selectedStatuses.length === 0 || selectedStatuses.includes(item.status);
 
-    // Só busca por CNPJ se o termo de busca tiver algum número
-    if (cleanSearchCnpj.length > 0) {
-      const cleanItemCnpj = item.cnpj?.replace(/[^\d]/g, "") ?? "";
-      hasCnpj = cleanItemCnpj.includes(cleanSearchCnpj);
-    }
-
-    return hasNomeComercial || hasNomeSocial || hasCnpj;
+    return matchesSearch && matchesUf && matchesStatus;
   });
-
-  return result;
 });
 
 export const paginatedItemsAtom = atom((get) => {

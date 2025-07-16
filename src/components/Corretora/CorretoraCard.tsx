@@ -11,11 +11,11 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 
-interface CorretoraCardProps {
+interface ICorretoraCardProps {
   corretora: ICorretora;
 }
 
-export const CorretoraCard = ({ corretora }: CorretoraCardProps) => {
+export const CorretoraCard = ({ corretora }: ICorretoraCardProps) => {
   const router = useRouter();
 
   const handleCardClick = () => {
@@ -38,7 +38,9 @@ export const CorretoraCard = ({ corretora }: CorretoraCardProps) => {
           </Box>
 
           <Typography variant="h6" component="h2" gutterBottom>
-            {corretora.nome_comercial}
+            {corretora.nome_comercial
+              ? corretora.nome_comercial
+              : corretora.nome_social}
           </Typography>
 
           <Typography variant="body2" color="text.secondary">

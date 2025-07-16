@@ -2,7 +2,7 @@ import { BackButton } from "@/components/BackButton";
 import { ContactInfo } from "@/components/Corretora/ContactInfo";
 import { CorretoraHeader } from "@/components/Corretora/CorretoraHeader";
 import { FinancialInfo } from "@/components/Corretora/FinancialInfo";
-import { getCorretoraByCnpj } from "@/services/axiosClient";
+import { getCorretoraByCnpj } from "@/services/corretoraService";
 import { Box, Container, Divider, Grid, Paper } from "@mui/material";
 import { notFound } from "next/navigation";
 

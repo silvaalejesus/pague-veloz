@@ -25,7 +25,7 @@ export default function NotFound() {
 
         <Typography sx={{ color: "text.secondary" }}>
           Desculpe, não conseguimos encontrar a página que você está procurando.
-          Talvez o CNPJ na URL esteja incorreto?
+          Talvez o CNPJ informado esteja incorreto?
         </Typography>
 
         <Button

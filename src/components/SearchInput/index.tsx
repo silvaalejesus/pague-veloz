@@ -6,7 +6,11 @@ import { InputAdornment, TextField } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 
-export const SearchInput = () => {
+interface SearchInputProps {
+  isLoading: boolean;
+}
+
+export const SearchInput = ({ isLoading }: SearchInputProps) => {
   const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom);
   const setCurrentPage = useSetAtom(currentPageAtom);
 
@@ -26,6 +30,7 @@ export const SearchInput = () => {
       placeholder="Buscar por CNPJ, Nome Comercial ou Razão Social..."
       value={searchQuery}
       onChange={handleInputChange}
+      disabled={isLoading}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">

@@ -7,9 +7,7 @@ import { Box, Container, Divider, Grid, Paper } from "@mui/material";
 import { notFound } from "next/navigation";
 
 interface PageProps {
-  params: {
-    cnpj: string;
-  };
+  params: Promise<{ cnpj: string }>;
 }
 
 export default async function CorretoraDetailPage({ params }: PageProps) {

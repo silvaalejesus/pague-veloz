@@ -13,6 +13,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
   Typography,
 } from "@mui/material";
 import { useAtom } from "jotai";
@@ -40,7 +41,7 @@ export function FilterPanel() {
     );
   };
 
-  const handleUfChange = (event: any) => {
+  const handleUfChange = (event: SelectChangeEvent<string[]>) => {
     const value = event.target.value;
     setSelectedUfs(typeof value === "string" ? value.split(",") : value);
   };

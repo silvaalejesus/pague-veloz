@@ -1,10 +1,13 @@
 import { mockCorretoras } from "@/__mocks__/api";
-import { axiosClient } from "@/services/axiosInstance";
+import { axiosInstance } from "@/services/axiosInstance";
 import { AxiosError } from "axios";
 import { getAllCorretoras, getCorretoraByCnpj } from "../corretoraService";
 
 jest.mock("@/services/axiosInstance");
-const mockedAxios = axiosClient as jest.Mocked<typeof axiosClient>;
+const mockedAxios = axiosInstance as jest.Mocked<typeof axiosInstance>;
+jest.mock("axios-cache-interceptor", () => ({
+  setupCache: jest.fn().mockReturnValue(mockCorretoras),
+}));
 
 describe("corretoraService", () => {
   beforeEach(() => {
@@ -12,7 +15,11 @@ describe("corretoraService", () => {
   });
 
   it("deve retornar todas as corretoras", async () => {
-    mockedAxios.get.mockResolvedValueOnce({ data: mockCorretoras });
+    mockedAxios.get.mockResolvedValueOnce({
+      data: mockCorretoras,
+      cached: false,
+      id: "123",
+    });
 
     const result = await getAllCorretoras();
 

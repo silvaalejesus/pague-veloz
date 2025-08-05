@@ -10,6 +10,7 @@ const mAxiosInstance = {
 const axiosMock = {
   create: jest.fn(() => mAxiosInstance),
   isAxiosError: jest.fn(),
+  cached: false,
 };
 
 export default axiosMock;

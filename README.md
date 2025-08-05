@@ -28,7 +28,7 @@ A arquitetura do projeto foi pensada para ser fácil de entender e usar, aprovei
 
 - **"Server fetches, Client interacts"**: o servidor busca os dados e os passa como props para os componentes de cliente, que então gerenciam a interatividade (painel de filtros, busca, paginação).
 - **Gerenciamento de Estado Atômico (Jotai):** O estado dos filtros e os dados da API são armazenados em átomos. Os **Átomos derivados** foram utilizados para criar um fluxo de dados reativo, onde a lista de itens exibidos é uma consequência automática das mudanças nos filtros de busca, UF e status.
-- **Camada de Serviço Dedicada:** Toda a lógica de comunicação com a API está isolada em `src/services/axiosClient.ts`. Isso centraliza a configuração do Axios (baseURL, timeout, interceptadores) e torna o código mais limpo e fácil de testar.
+- **Camada de Serviço Dedicada:** Toda a lógica de comunicação com a API está isolada em `src/services/axiosInstance.ts`. Isso centraliza a configuração do Axios (baseURL, timeout, interceptadores) e torna o código mais limpo e fácil de testar.
 - **Estrutura de Pastas Lógica:** O projeto segue uma organização clara de pastas por responsabilidade (`/app` para rotas, `/components` para UI reutilizável, `/store` para estado, `/services` para a API).
 
 ## Como Rodar a Aplicação

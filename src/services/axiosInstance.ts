@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
+import { setupCache } from "axios-cache-interceptor";
 
-export const axiosClient = axios.create({
+export const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     "Content-Type": "application/json",
@@ -8,7 +9,11 @@ export const axiosClient = axios.create({
   timeout: 10000,
 });
 
-axiosClient.interceptors.response.use(
+export const axiosClient = setupCache(axiosInstance, {
+  ttl: 15 * 60 * 1000, // Tempo de vida do cache: 15 minutos
+});
+
+axiosInstance.interceptors.response.use(
   (response) => response,
 
   (error: AxiosError) => {

@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  allItemsAtom,
-  paginatedItemsAtom,
-  searchQueryAtom,
-} from "@/store/atoms";
+import { allItemsAtom, paginatedItemsAtom } from "@/store/atoms";
 import { ICorretora } from "@/types";
 import {
   Alert,
@@ -19,18 +15,18 @@ import { useEffect, useState } from "react";
 import { CorretoraCard } from "../Corretora/CorretoraCard";
 import { FilterPanel } from "../FilterPanel";
 import { PaginationControls } from "../PaginationControls";
-import { SearchInput } from "../SearchInput";
 
 interface ItemsListProps {
   initialItems: ICorretora[] | null;
 }
 
 export function ItemsList({ initialItems }: ItemsListProps) {
+  const allItems = useAtomValue(allItemsAtom);
   const setAllItems = useSetAtom(allItemsAtom);
   const paginatedItems = useAtomValue(paginatedItemsAtom);
-  const searchQuery = useAtomValue(searchQueryAtom);
   const [isLoading, setIsLoading] = useState(true);
   const HEADER_HEIGHT = 70;
+
   useEffect(() => {
     setIsLoading(true);
     if (initialItems) {
@@ -57,8 +53,7 @@ export function ItemsList({ initialItems }: ItemsListProps) {
       minHeight={`calc(100vh - ${HEADER_HEIGHT}px)`}
     >
       <Box p={2} flex="1">
-        <SearchInput isLoading={isLoading} />
-        <FilterPanel />
+        <FilterPanel isLoading={isLoading} />
         {isLoading && (
           <Box display="flex" flexDirection="column" alignItems="center" p={4}>
             <CircularProgress sx={{ mb: 2 }} />
@@ -79,7 +74,11 @@ export function ItemsList({ initialItems }: ItemsListProps) {
           </>
         ) : (
           <Typography textAlign="center" p={4} color="text.secondary">
-            {searchQuery && "Nenhum resultado encontrado para a sua busca."}
+            {allItems.length > 0
+              ? "Nenhum resultado encontrado para os filtros aplicados."
+              : !isLoading
+              ? "Nenhuma corretora para exibir."
+              : ""}
           </Typography>
         )}
       </Box>

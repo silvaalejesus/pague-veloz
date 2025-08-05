@@ -16,6 +16,7 @@ export const errorAtom = atom<string | null>(null);
 
 export const selectedUfsAtom = atom<string[]>([]);
 export const selectedStatusesAtom = atom<string[]>([]);
+export const cvmCodeAtom = atom<string>("");
 
 // Busca apenas as corretoras que estão ativas
 export const activeItemsAtom = atom((get) => {
@@ -28,6 +29,7 @@ export const filteredItemsAtom = atom((get) => {
   const query = get(searchQueryAtom).toLowerCase();
   const selectedUfs = get(selectedUfsAtom);
   const selectedStatuses = get(selectedStatusesAtom);
+  const cvmCode = get(cvmCodeAtom);
 
   return allItems.filter((item) => {
     const nomeComercial = item.nome_comercial?.toLowerCase() ?? "";
@@ -36,15 +38,19 @@ export const filteredItemsAtom = atom((get) => {
     const searchCnpj = query.replace(/[^\d]/g, "");
 
     const matchesSearch =
+      query === "" ||
       nomeComercial.includes(query) ||
       nomeSocial.includes(query) ||
       (searchCnpj.length > 0 && cnpj.includes(searchCnpj));
 
     const matchesUf = selectedUfs.length === 0 || selectedUfs.includes(item.uf);
+
     const matchesStatus =
       selectedStatuses.length === 0 || selectedStatuses.includes(item.status);
 
-    return matchesSearch && matchesUf && matchesStatus;
+    const matchesCvm = cvmCode === "" || item.codigo_cvm?.includes(cvmCode);
+
+    return matchesSearch && matchesUf && matchesStatus && matchesCvm;
   });
 });
 

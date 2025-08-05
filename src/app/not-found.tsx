@@ -19,9 +19,7 @@ export default function NotFound() {
           justifyContent: "center",
         }}
       >
-        <Typography variant="h3" paragraph>
-          Página Não Encontrada
-        </Typography>
+        <Typography variant="h3">Página Não Encontrada</Typography>
 
         <Typography sx={{ color: "text.secondary" }}>
           Desculpe, não conseguimos encontrar a página que você está procurando.
